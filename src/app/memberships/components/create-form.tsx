@@ -1,24 +1,52 @@
 'use client'
 
 import { LabeledInput } from '@/components/input'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import { createClient } from '../API/create-client'
+import { createMember } from '../API/create-member'
+import { Toaster, toast } from 'sonner'
 
 export const RegisterClientForm = () => {
   const pathname = usePathname()
   console.log(pathname)
-  const { push } = useRouter()
   const [loading, setLoading] = useState(false)
   console.log(loading, setLoading)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    console.log(formData)
+    const data = await createClient(formData)
+    console.log(data)
+    try {
+      if (data.status === 200) {
+        const clientID = data.data.client.id
+        console.log('Client ID:', clientID)
+        const months = Number(formData.get('months'))
+        console.log('Months:', months)
+
+        const response = await createMember(clientID, months)
+        console.log(response)
+        if (response.status === 200) {
+          console.log('Membership created successfully')
+          toast.success('Membership created successfully')
+        // reload page
+        } else {
+          console.log('Error creating membership')
+          toast.error('Error creating membership')
+        }
+      }
+    } catch (error) {
+      console.log('Error:', error)
+      toast.error('Error creating membership')
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className='col-span-2 rounded-lg bg-white p-6 shadow dark:bg-gray-900'>
       <div className='col-span-2 rounded-lg bg-white p-6 shadow dark:bg-gray-900'>
-        <h2 className='text-lg font-semibold'>Create Membership</h2>
+        <h2 className='text-lg font-semibold'>Create Client</h2>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center space-x-4'>
             <svg
@@ -73,8 +101,19 @@ export const RegisterClientForm = () => {
                 name='email'
               />
             </div>
+            <div className='space-y-2'>
+              <LabeledInput
+                label='Days to expire'
+                id='months'
+                placeholder='30'
+                type='number'
+                name='months'
+                defaultValue={30}
+              />
+            </div>
           </div>
           <div className='flex justify-end'>
+            <Toaster />
             <button className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-slate-600 text-white'>
               Submit
             </button>

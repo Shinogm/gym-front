@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { MinicompoenentClient } from './mini-client-component'
 
 interface Props {
   name?: string
@@ -46,29 +47,25 @@ export const VerifyMember = ({ name, lastName, email, membershipId, expiration, 
         </div>
         <div className='space-y-2'>
           <input
-            className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+            className='text-black flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
             placeholder='Enter ID or Scan QR Code'
           />
-          <button className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2'>
+          <button className=' bg-slate-500 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2'>
             Verify
           </button>
           <div className='flex items-center space-x-2'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              stroke-width='2'
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              className='h-6 w-6 text-green-500'
-            >
-              <circle cx='12' cy='12' r='10' />
-              <path d='m9 12 2 2 4-4' />
-            </svg>
-            <p>Membership is valid</p>
+
+            <section className='flex items-center space-x-2'>
+              <MinicompoenentClient
+                created='true'
+                email='test@test.com'
+                expiration='2023-01-01'
+                lastName='test'
+                name='a'
+                membershipId={1}
+                sun={2}
+              />
+            </section>
           </div>
         </div>
       </div>

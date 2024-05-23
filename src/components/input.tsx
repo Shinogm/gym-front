@@ -9,12 +9,13 @@ interface Props {
   required?: boolean
   name?: string
   capitalize?: boolean
+  defaultValue?: number
 }
 const className = {
   isCapitalized: 'capitalize'
 }
 
-export const LabeledInput = ({ label, id, placeholder, type, required = false, name, capitalize = false }: Props) => (
+export const LabeledInput = ({ label, id, placeholder, type, required = false, name, capitalize = false, defaultValue }: Props) => (
   <section>
     <label
       className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-400'
@@ -31,6 +32,7 @@ export const LabeledInput = ({ label, id, placeholder, type, required = false, n
       name={name}
       type={type}
       required={required}
+      defaultValue={defaultValue}
     />
   </section>
 )
