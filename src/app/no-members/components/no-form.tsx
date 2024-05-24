@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { ScompoenentClient } from './client-interface'
-import { ClientList, getAllClients } from '../API/get-all'
+import { ResponseClientNo, noMembers } from '../API/no-members'
+import { SNocompoenentClient } from './no-memberships'
 
-export const AllMembersComponent = () => {
-  const [clients, setClients] = useState<ClientList>()
+export const AllNoMembersComponent = () => {
+  const [clients, setClients] = useState<ResponseClientNo>()
 
   useEffect(() => {
-    getAllClients().then((response) => {
+    noMembers().then((response) => {
       setClients(response?.data)
       console.log(response?.data)
     }).catch((error) => {
@@ -17,7 +17,7 @@ export const AllMembersComponent = () => {
   }, [])
 
   return (
-    <div className='rounded-lg bg-white p-6 shadow dark:bg-gray-900 max-h-96 overflow-y-auto flex flex-col'>
+    <div className='rounded-lg bg-white p-6 shadow dark:bg-gray-900 w-full '>
       <h2 className='text-lg font-semibold'>Users with Membership</h2>
       <div className='mt-4 space-y-4'>
         <div className='flex items-center space-x-4'>
@@ -40,23 +40,20 @@ export const AllMembersComponent = () => {
           </svg>
           <h3 className='text-xl font-medium'>Member List</h3>
         </div>
-        <div className='flex flex-col items-center space-y-2 '>
+        <div className='flex flex-col items-center space-y-2'>
 
           <>
 
-            {clients !== undefined && clients?.memberships.length > 0
+            {clients !== undefined && clients?.data.length > 0
               ? (
-                  clients?.memberships.map((client) => (
-                    <ScompoenentClient
-                      created={client.client.created_at}
-                      membershipId={client.membership.code_membership ?? 0}
-                      email={client.client.email ?? ''}
-                      expiration={client.membership.expiration_date ?? ''}
-                      lastName={client.client.lastname ?? ''}
-                      name={client.client.name ?? ''}
-                      key={client.client.id}
-                      id={client.client.id}
-                      sun={2}
+                  clients?.data.map((client) => (
+                    <SNocompoenentClient
+                      created={client.created_at}
+                      email={client.email ?? ''}
+                      lastName={client.lastname ?? ''}
+                      name={client.name ?? ''}
+                      key={client.id}
+                      id={client.id}
                     />
                   ))
                 )

@@ -108,7 +108,7 @@ export const MinicompoenentClient = ({ name, key, id, lastName, email, membershi
             <button
               type='button'
               onClick={() => {
-                push(`/members/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId ?? 0}&expiration=${expiration}&created=${created}`)
+                push(`/memberships/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId ?? 0}&expiration=${expiration}&created=${created}`)
               }} className='inline-flex items-center justify-center text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent h-8 w-8 rounded-full text-gray-500 hover:text-green-500'
             >
               <svg
@@ -263,9 +263,8 @@ export const MinicompoenentClient = ({ name, key, id, lastName, email, membershi
           </div>
         </div>
         <div className='text-center'>
-          <h3 className='text-lg font-bold text-gray-800 mb-1'>ClienteID: {id} Nombre: {name} {lastName}</h3>
+          <h3 className='text-lg font-bold text-gray-800 mb-1'>Nombre-{id}- : {name} {lastName}</h3>
           <p className='text-gray-600 mb-1 text-sm'>{email}</p>
-          <p className='text-gray-600 mb-1 text-sm'>Membership ID: {membershipId}</p>
           <p className='text-gray-600 mb-1 text-sm'>Expiration: {expiration}</p>
           <p className='text-gray-600 text-sm'>Created: {created}</p>
         </div>

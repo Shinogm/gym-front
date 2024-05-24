@@ -1,23 +1,38 @@
-import { APIENDPOINTS } from '@/utils/api-call'
 import { z } from 'zod'
+import { verifyCode } from './verify-code'
 
 const clientSchema = z.object({
-  code_membership: z.number(),
+  id: z.number(),
   created_at: z.string(),
-  client_id: z.number(),
-  have_membership_id: z.number(),
-  expiration_date: z.string()
+  name: z.string(),
+  lastname: z.string(),
+  email: z.string().nullable().optional(),
+  permission_id: z.number()
 })
 
 const clientListSchema = z.object({
   message: z.string(),
-  clients: z.array(clientSchema)
+  memberships: z.array(
+    z.object({
+      membership: z.object({
+        code_membership: z.number(),
+        created_at: z.string(),
+        client_id: z.number(),
+        have_membership_id: z.number(),
+        expiration_date: z.string()
+      }),
+      response: z.object({
+        message: z.string()
+      }),
+      client: clientSchema
+    })
+  )
 })
 
 export type ClientList = z.infer<typeof clientListSchema>
 
-export const getAllClients = async (id: number) => {
-  const response = await fetch(`${APIENDPOINTS.getClientWithMembershipPoint(id)}`, {
+export const getAllClients = async () => {
+  const response = await fetch('http://localhost:3001/memberships/membership/check', {
     method: 'GET'
   })
 
@@ -27,8 +42,15 @@ export const getAllClients = async (id: number) => {
     throw new Error('Error al obtener los clientes')
   }
 
-  const data = await response.json()
-  const parsedData = clientListSchema.parse(data)
-  console.log('Data:', data)
-  return { data: parsedData, status: response.status }
+  if (response.status === 200) {
+    const data = await response.json()
+    const parsedData = clientListSchema.parse(data)
+    const res = await verifyCode(parsedData.memberships[0].membership.code_membership)
+
+    console.log('Res:', res)
+
+    console.log('Data:', data)
+
+    return { data: parsedData, status: response.status, user: res }
+  }
 }

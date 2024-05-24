@@ -9,7 +9,7 @@ export const APIENDPOINTS = {
   // Clients
   postClientPoint: `${API_URL}/clients/create`,
   getAllClientsPoint: `${API_URL}/clients/get`,
-  putModifyClientPoint: (clientID: number) => `${API_URL}/clients/modify-client/${clientID}`,
+  putModifyClientPoint: (clientID: number) => `${API_URL}/clients/modify/${clientID}`,
   deleteClientPoint: (clientID: number) => `${API_URL}/clients/delete/${clientID}`,
 
   // Memberships

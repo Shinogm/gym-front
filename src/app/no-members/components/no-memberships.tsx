@@ -1,9 +1,9 @@
 'use client'
+import { createMember } from '@/app/memberships/API/create-member'
+import { deleteClient } from '@/app/memberships/API/delete-client'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { createMember } from '../API/create-member'
-import { cancelMemmership } from '../API/cancel-member'
 import { toast, Toaster } from 'sonner'
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
   sun?: number
 }
 
-export const ScompoenentClient = ({ name, key, id, lastName, email, membershipId, expiration, created, sun }: Props) => {
+export const SNocompoenentClient = ({ name, key, id, lastName, email, membershipId, expiration, created, sun }: Props) => {
   const { push } = useRouter()
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isSvvDialogOpen, setIsSvvDialogOpen] = useState(false)
@@ -36,7 +36,7 @@ export const ScompoenentClient = ({ name, key, id, lastName, email, membershipId
 
   const handleDeleteConfirm = async () => {
     console.log('Delete')
-    const response = await cancelMemmership(id ?? 0)
+    const response = await deleteClient(id ?? 0)
 
     if (response == null) {
       toast.error('Failed to delete client')
@@ -86,7 +86,7 @@ export const ScompoenentClient = ({ name, key, id, lastName, email, membershipId
               <span className='sr-only'>Delete</span>
             </button>
             {isDeleteDialogOpen && (
-              <div className='absolute top-0 left-0 w-full h-full flex items-end justify-end bg-gray-900 bg-opacity-50'>
+              <div className='absolute top-0 left- w-full h-full flex items-end justify-end bg-gray-900 bg-opacity-50'>
                 <div className='bg-white p-4 rounded-lg shadow-lg'>
                   <p className='text-sm text-black'>¿Estás seguro de que deseas eliminar este usuario?</p>
                   <div className='mt-2 flex justify-end'>
@@ -99,7 +99,7 @@ export const ScompoenentClient = ({ name, key, id, lastName, email, membershipId
             )}
             <button
               onClick={() => {
-                push(`/memberships/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId ?? 0}&expiration=${expiration ?? 0}&created=${created ?? ''}`)
+                push(`/memberships/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId ?? 0}&expiration=${expiration ?? ''}&created=${created}`)
               }} className='inline-flex items-center justify-center text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-green-100 h-8 w-8 rounded-full text-gray-500 hover:text-green-500'
             >
               <svg

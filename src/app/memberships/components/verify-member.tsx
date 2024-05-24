@@ -89,7 +89,9 @@ export const VerifyMember = () => {
 
                   <section className='items-center space-x-2 justify-center'>
                     <MinicompoenentClient
+                      key={client?.memberships.id ?? 0}
                       id={client?.memberships.id ?? 0}
+                      membershipId={client?.memberships.id ?? 0}
                       created={client?.memberships.created_at ?? 'no created'}
                       email={client?.memberships.email ?? ''}
                       expiration={client?.response.message ?? 'no expiration'}
