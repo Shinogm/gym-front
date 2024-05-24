@@ -1,18 +1,21 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScompoenentClient } from './client-interface'
+import { ClientList, getAllClients } from '../API/get-all'
 
-interface Props {
-  name?: string
-  lastName?: string
-  email?: string
-  membershipId?: number
-  expiration?: string
-  created?: string
-}
+export const AllMembersComponent = () => {
+  const [clients, setClients] = useState<ClientList>()
 
-export const AllMembersComponent = ({ name, lastName, email, membershipId, expiration, created }: Props) => {
+  useEffect(() => {
+    getAllClients(1).then((response) => {
+      setClients(response.data)
+      console.log(response.data)
+    }).catch((error) => {
+      console.log('Error:', error)
+    })
+  }, [])
+
   return (
     <div className='max-h-96 rounded-lg bg-white p-6 shadow dark:bg-gray-900 overflow-y-auto'>
       <h2 className='text-lg font-semibold'>Users with Membership</h2>
@@ -41,15 +44,26 @@ export const AllMembersComponent = ({ name, lastName, email, membershipId, expir
 
           <>
 
-            <ScompoenentClient
-              created='true'
-              email='test@test.com'
-              expiration='2023-01-01'
-              lastName='test'
-              name='a'
-              membershipId={1}
-              sun={2}
-            />
+            {clients !== undefined && clients?.clients.length > 0
+              ? (
+                  clients?.clients.map((client) => (
+                    <ScompoenentClient
+                      created={client.created_at}
+                      email={client.expiration_date}
+                      expiration={client.expiration_date}
+                      lastName={client.expiration_date}
+                      name={client.created_at}
+                      membershipId={client.code_membership}
+                      key={client.code_membership}
+                      sun={2}
+                    />
+                  ))
+                )
+              : (
+                <div className='flex items-center space-x-2'>
+                  <span>No Membership</span>
+                </div>
+                )}
           </>
           <>
             <ScompoenentClient

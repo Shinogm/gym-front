@@ -1,7 +1,7 @@
-import { APIENDPOINTS } from '@/utils/api-call'
+'use  server'
 
 export const deleteClient = async (id: number) => {
-  const response = await fetch(`${APIENDPOINTS.deleteClientPoint(id)}`, {
+  const response = await fetch(`http://localhost:3001/clients/delete/${id}`, {
     method: 'DELETE'
   })
 

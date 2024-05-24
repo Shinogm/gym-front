@@ -12,7 +12,7 @@ interface Props {
   name: string
   lastName: string
   email: string
-  membershipId: number
+  membershipId?: number
   expiration: string
   created: string
   sun?: number
@@ -70,6 +70,7 @@ export const MinicompoenentClient = ({ name, key, id, lastName, email, membershi
         <div className='absolute top-2 right-2'>
           <div className='flex items-center space-x-1'>
             <button
+              type='button'
               onClick={() => {
                 setIsDeleteDialogOpen(true)
               }} className='inline-flex items-center justify-center text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent h-8 w-8 rounded-full text-gray-500 hover:text-red-500'
@@ -98,15 +99,16 @@ export const MinicompoenentClient = ({ name, key, id, lastName, email, membershi
                   <p className='text-sm text-black'>¿Estás seguro de que deseas eliminar este usuario?</p>
                   <div className='mt-2 flex justify-end'>
                     <Toaster />
-                    <button onClick={handleDeleteConfirm} className='mr-2 text-red-500 text-sm'>Confirmar</button>
-                    <button onClick={() => setIsDeleteDialogOpen(false)} className='text-gray-500 text-sm'>Cancelar</button>
+                    <button type='button' onClick={handleDeleteConfirm} className='mr-2 text-red-500 text-sm'>Confirmar</button>
+                    <button type='button' onClick={() => setIsDeleteDialogOpen(false)} className='text-gray-500 text-sm'>Cancelar</button>
                   </div>
                 </div>
               </div>
             )}
             <button
+              type='button'
               onClick={() => {
-                push(`/members/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId}&expiration=${expiration}&created=${created}`)
+                push(`/members/modify?email=${email}&clientid=${id?.toString() ?? 0}&name=${name}&last-name=${lastName}&memberis=${membershipId ?? 0}&expiration=${expiration}&created=${created}`)
               }} className='inline-flex items-center justify-center text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent h-8 w-8 rounded-full text-gray-500 hover:text-green-500'
             >
               <svg

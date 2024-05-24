@@ -1,20 +1,39 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { MinicompoenentClient } from './mini-client-component'
+import { VerifyCode, verifyCode } from '../API/verify-code'
+import { Toaster, toast } from 'sonner'
+import { AnimatePresence, motion } from 'framer-motion'
 
-interface Props {
-  name?: string
-  lastName?: string
-  email?: string
-  membershipId?: number
-  expiration?: string
-  created?: string
-}
+export const VerifyMember = () => {
+  const [loading, setLoading] = useState(false)
+  const [client, setClient] = useState<VerifyCode>()
 
-export const VerifyMember = ({ name, lastName, email, membershipId, expiration, created }: Props) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const code = Number(formData.get('code'))
+    console.log('Code:', code)
+    const response = await verifyCode(code)
+    console.log(response)
+    try {
+      if (response?.status === 200) {
+        setLoading(true)
+        toast.success('Membership verified successfully')
+        setClient(response?.data)
+      }
+      if (response === undefined) {
+        toast.error('Error verifying membership')
+      }
+    } catch (error) {
+      console.log('Error:', error)
+      setLoading(false)
+      toast.error('Error verifying membership')
+    }
+  }
   return (
-    <div className='rounded-lg bg-white p-6 shadow dark:bg-gray-900'>
+    <form onSubmit={handleSubmit}>
       <h2 className='text-lg font-semibold'>Verify Membership</h2>
       <div className='mt-4 space-y-4'>
         <div className='flex items-center space-x-4'>
@@ -48,28 +67,48 @@ export const VerifyMember = ({ name, lastName, email, membershipId, expiration, 
         <div className='space-y-2'>
           <input
             className='text-black flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
-            placeholder='Enter ID or Scan QR Code'
+            placeholder='Enter Code'
+            type='number'
+            name='code'
+            required
           />
-          <button className=' bg-slate-500 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2'>
+          <Toaster />
+          <button type='submit' className=' bg-slate-500 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2'>
             Verify
           </button>
-          <div className='flex items-center space-x-2'>
+          <AnimatePresence>
+            {loading
+              ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className='flex items-center space-x-2'
+                >
 
-            <section className='flex items-center space-x-2'>
-              <MinicompoenentClient
-                created='true'
-                email='test@test.com'
-                expiration='2023-01-01'
-                lastName='test'
-                name='a'
-                membershipId={1}
-                sun={2}
-              />
-            </section>
-          </div>
+                  <section className='items-center space-x-2 justify-center'>
+                    <MinicompoenentClient
+                      id={client?.memberships.id ?? 0}
+                      created={client?.memberships.created_at ?? 'no created'}
+                      email={client?.memberships.email ?? ''}
+                      expiration={client?.response.message ?? 'no expiration'}
+                      lastName={client?.memberships.lastname ?? 'no lastname'}
+                      name={client?.memberships.name ?? 'no name'}
+                      sun={2}
+                    />
+                  </section>
+                </motion.div>
+                )
+              : (
+                <div className='flex items-center space-x-2'>
+                  <span>No Membership</span>
+                </div>
+                )}
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </form>
 
   )
 }
